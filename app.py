@@ -243,15 +243,22 @@ st.divider()
 col1, col2 = st.columns([1, 1.2], gap="large")
 
 with col1:
-    st.subheader("📥 Đầu Vào Dữ Liệu")
-    # Sử dụng Tabs để gom nhóm nguồn ảnh
-    tab1, tab2 = st.tabs(["📁 Tải ảnh lên", "📷 Chụp trực tiếp"])
+    st.markdown("### 📥 Phương thức nhập")
+    
+    # SỬ DỤNG ICON THAY CHO CHỮ
+    # 📁: Tải file | 📷: Chụp ảnh
+    choice = st.radio(
+        "Chọn cách thức:",
+        ["📁 Tải ảnh", "📷 Webcam"],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
     
     img_data = None
-    with tab1:
-        img_data = st.file_uploader("Kéo thả hoặc chọn file...", type=["jpg", "png", "jpeg"])
-    with tab2:
-        img_data = st.camera_input("Chụp ảnh từ webcam")
+    if "📁" in choice:
+        img_data = st.file_uploader("Chọn file hình ảnh...", type=["jpg", "png", "jpeg"])
+    else:
+        img_data = st.camera_input("Chụp ảnh phân tích")
 
 with col2:
     st.markdown("### 🔍 Phân tích AI")
