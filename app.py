@@ -4,8 +4,8 @@ from PIL import Image
 import numpy as np
 
 # 1. Cấu hình giao diện
-st.set_page_config(page_title="Hệ thống Nhận diện Người", layout="centered")
-st.title("👤 Nhận diện Người ")
+st.set_page_config(page_title="Hệ Thống Nhận Diện Người", layout="centered")
+st.title("👤 Nhận Diện Người ")
 
 # 2. Hàm nạp mô hình (Khung Sequential chống lỗi 2 tensors)
 @st.cache_resource
@@ -71,8 +71,9 @@ if img_data is not None:
             st.error("Model chưa sẵn sàng.")
 
 # Sidebar thông tin dự án
-st.sidebar.markdown("### Thông tin sinh viên")
+st.sidebar.markdown("### Thông Tin Sinh Viên")
 
-st.sidebar.info("Họ tên: Lê Đặng Tuấn Bảo")
-st.sidebar.info("MSSV: 223332815")
+st.sidebar.info("Họ Tên: Lê Đặng Tuấn Bảo")
+st.sidebar.info("MSV: 223332815")
 st.sidebar.info("Lớp: RB&AI-K63")
+
