@@ -283,12 +283,10 @@ with col2:
             if prob < 0.5:
                 confidence = (1 - prob) * 100
                 st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
-                st.metric("Mức độ tin cậy", f"{confidence:.2f}%", delta="Positive Match")
                 st.balloons()
             else:
                 confidence = prob * 100
                 st.error(f"## ❌ KẾT LUẬN: KHÔNG PHẢI NGƯỜI")
-                st.metric("Mức độ tin cậy", f"{confidence:.2f}%", delta="- Negative", delta_color="inverse")
     else:
         st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
 
@@ -306,3 +304,4 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
