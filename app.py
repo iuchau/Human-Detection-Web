@@ -129,8 +129,8 @@ def load_my_model():
 model = load_my_model()
 
 # --- TIÊU ĐỀ CHÍNH ---
-st.write(f"<h1 style='text-align: center; color: #1E3A8A;'>👤 Hệ Thống Nhận Diện Người Thông Minh</h1>", unsafe_allow_html=True)
-st.write(f"<p style='text-align: center; font-style: italic;'>Dự án Xử lý ảnh & AI - Công nghệ MobileNetV2</p>", unsafe_allow_html=True)
+st.write(f"<h1 style='text-align: center; color: #1E3A8A;'>👤 Hệ Thống Nhận Diện Người</h1>", unsafe_allow_html=True)
+st.write(f"<p style='text-align: center; font-style: italic;'>Dự án Học Sâu - Công nghệ MobileNetV2</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # --- BỐ CỤC CHÍNH (2 Cột) ---
@@ -198,5 +198,6 @@ st.sidebar.markdown(f"""
 """)
 
 st.sidebar.divider()
+
 
 
