@@ -243,22 +243,38 @@ st.divider()
 col1, col2 = st.columns([1, 1.2], gap="large")
 
 with col1:
-    st.markdown("### 📥 Phương thức nhập")
+    st.markdown("### 📥 Phương thức nhập dữ liệu")
     
-    # SỬ DỤNG ICON THAY CHO CHỮ
-    # 📁: Tải file | 📷: Chụp ảnh
-    choice = st.radio(
-        "Chọn cách thức:",
-        ["📁 Tải ảnh", "📷 Webcam"],
-        horizontal=True,
-        label_visibility="collapsed"
-    )
+    # CHUYỂN SANG DẠNG TABS THAY CHO RADIO
+    tab_upload, tab_camera = st.tabs(["📁 Tải ảnh lên", "📷 Sử dụng Webcam"])
     
     img_data = None
-    if "📁" in choice:
-        img_data = st.file_uploader("Chọn file hình ảnh...", type=["jpg", "png", "jpeg"])
-    else:
-        img_data = st.camera_input("Chụp ảnh phân tích")
+    with tab_upload:
+        img_data = st.file_uploader("Kéo thả file hình ảnh tại đây...", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
+        
+    with tab_camera:
+        img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
+        # Ưu tiên lấy ảnh từ camera nếu cả hai đều có dữ liệu
+        if img_data_cam:
+            img_data = img_data_cam
+
+# with col1:
+#     st.markdown("### 📥 Phương thức nhập")
+    
+#     # SỬ DỤNG ICON THAY CHO CHỮ
+#     # 📁: Tải file | 📷: Chụp ảnh
+#     choice = st.radio(
+#         "Chọn cách thức:",
+#         ["📁 Tải ảnh", "📷 Webcam"],
+#         horizontal=True,
+#         label_visibility="collapsed"
+#     )
+    
+#     img_data = None
+#     if "📁" in choice:
+#         img_data = st.file_uploader("Chọn file hình ảnh...", type=["jpg", "png", "jpeg"])
+#     else:
+#         img_data = st.camera_input("Chụp ảnh phân tích")
 
 with col2:
     st.markdown("### 🔍 Phân tích ")
@@ -303,6 +319,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
