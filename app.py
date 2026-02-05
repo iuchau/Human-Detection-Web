@@ -72,4 +72,7 @@ if img_data is not None:
 
 # Sidebar thông tin dự án
 st.sidebar.markdown("### Thông tin sinh viên")
-st.sidebar.info("Họ tên: Lê Đặng Tuấn Bảo\n MSSV: 223332815\nLớp: RBAI-K63")
+
+st.sidebar.info("Họ tên: Lê Đặng Tuấn Bảo")
+st.sidebar.info("MSSV: 223332815")
+st.sidebar.info("Lớp: RB&AI-K63")
