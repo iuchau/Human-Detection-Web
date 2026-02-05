@@ -85,7 +85,7 @@ import time
 
 # 1. Cấu hình trang (Mở rộng layout và thêm favicon)
 st.set_page_config(
-    page_title="AI Human Detection - Tuấn Bảo",
+    page_title="Human Detection",
     page_icon="👤",
     layout="wide"
 )
@@ -188,17 +188,15 @@ with col2:
         st.info("Vui lòng cung cấp hình ảnh ở cột bên trái để bắt đầu nhận diện.")
 
 # --- SIDEBAR THÔNG TIN ---
-st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2103/2103807.png", width=100)
 st.sidebar.markdown("## 🎓 Thông Tin Sinh Viên")
 st.sidebar.divider()
 st.sidebar.markdown(f"""
 - **Họ Tên:** Lê Đặng Tuấn Bảo
 - **MSV:** 223332815
 - **Lớp:** RB&AI-K63
-- **Học phần:** Xử lý ảnh
+- **Học phần:** Học Sâu
 """)
 
 st.sidebar.divider()
-st.sidebar.caption("Phiên bản v2.0 - 2026")
 
 
