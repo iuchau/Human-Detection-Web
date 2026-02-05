@@ -206,7 +206,7 @@ import numpy as np
 import time
 
 # 1. CẤU HÌNH TRANG
-st.set_page_config(page_title="Human Detection AI", page_icon="👤", layout="wide")
+st.set_page_config(page_title="Human Detection ", page_icon="👤", layout="wide")
 
 # CSS để làm đẹp các nút và bo góc
 st.markdown("""
@@ -236,7 +236,7 @@ def load_my_model():
 model = load_my_model()
 
 # --- HEADER ---
-st.write("<h1 style='text-align: center; color: #1E3A8A;'>🎯 HỆ THỐNG NHẬN DIỆN THÔNG MINH</h1>", unsafe_allow_html=True)
+st.write("<h1 style='text-align: center; color: #1E3A8A;'>🎯 HỆ THỐNG NHẬN DIỆN NGƯỜI</h1>", unsafe_allow_html=True)
 st.divider()
 
 # --- CHIA CỘT ---
@@ -261,13 +261,13 @@ with col1:
         img_data = st.camera_input("Chụp ảnh phân tích")
 
 with col2:
-    st.markdown("### 🔍 Phân tích AI")
+    st.markdown("### 🔍 Phân tích ")
     if img_data is not None:
         image = Image.open(img_data).convert('RGB')
         st.image(image, caption='Dữ liệu đầu vào', use_container_width=True)
         
         if model is not None:
-            with st.spinner('AI đang quét hình ảnh...'):
+            with st.spinner('Đang quét hình ảnh...'):
                 # Xử lý ảnh
                 img_resized = image.resize((224, 224))
                 img_array = np.array(img_resized).astype(np.float32) / 255.0
@@ -292,7 +292,6 @@ with col2:
 
 # --- SIDEBAR ---
 with st.sidebar:
-    st.title("👨‍🎓 Tác giả")
     st.markdown(f"""
     **Họ tên:** Lê Đặng Tuấn Bảo  
     **MSV:** 223332815  
@@ -304,5 +303,6 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
