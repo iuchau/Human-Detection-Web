@@ -203,70 +203,72 @@ import streamlit as st
 import tensorflow as tf
 from PIL import Image
 import numpy as np
+import time
 
-# 1. CẤU HÌNH GIAO DIỆN CHUẨN
-st.set_page_config(page_title="AI Human Detection - Tuấn Bảo", layout="wide")
+# 1. CẤU HÌNH TRANG
+st.set_page_config(page_title="Human Detection AI", page_icon="👤", layout="wide")
 
-# CSS để giao diện cân đối và chuyên nghiệp
+# CSS để làm đẹp các nút và bo góc
 st.markdown("""
     <style>
-    .main { background-color: #f5f7f9; }
-    .stAlert { border-radius: 10px; }
-    div[data-testid="stMetricValue"] { font-size: 2rem; color: #1E3A8A; }
+    .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
+    div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .main { background-color: #f0f2f6; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. HÀM NẠP MÔ HÌNH (Sử dụng cấu trúc an toàn nhất)
+# 2. HÀM NẠP MÔ HÌNH (Cache để chạy nhanh hơn)
 @st.cache_resource
 def load_my_model():
     try:
-        # Tự dựng khung Sequential để tránh mọi lỗi Tensor
-        base_model = tf.keras.applications.MobileNetV2(
-            input_shape=(224, 224, 3), include_top=False, weights=None
-        )
+        base_model = tf.keras.applications.MobileNetV2(input_shape=(224, 224, 3), include_top=False, weights=None)
         model = tf.keras.Sequential([
             base_model,
             tf.keras.layers.GlobalAveragePooling2D(),
             tf.keras.layers.Dense(1, activation='sigmoid')
         ])
-        # Nạp file trọng số (Đảm bảo file này đã có trên GitHub)
         model.load_weights('model_weights.weights.h5')
         return model
     except Exception as e:
-        st.error(f"Lỗi nạp mô hình: {e}")
+        st.error(f"Lỗi hệ thống: {e}")
         return None
 
 model = load_my_model()
 
-# --- GIAO DIỆN CHÍNH ---
-st.title("👤 Hệ Thống Nhận Diện Người - MobileNetV2")
-st.markdown(f"**Sinh viên:** Lê Đặng Tuấn Bảo | **MSV:** 223332815 | **Lớp:** RB&AI-K63")
+# --- HEADER ---
+st.write("<h1 style='text-align: center; color: #1E3A8A;'>🎯 HỆ THỐNG NHẬN DIỆN THÔNG MINH</h1>", unsafe_allow_html=True)
 st.divider()
 
-# Chia 2 cột: Trái nhập liệu - Phải hiển thị kết quả
-col1, col2 = st.columns([1, 1], gap="large")
+# --- CHIA CỘT ---
+col1, col2 = st.columns([1, 1.2], gap="large")
 
 with col1:
-    st.subheader("📥 Nhập dữ liệu ảnh")
-    source = st.radio("Chọn phương thức:", ("Tải ảnh từ máy", "Chụp từ Webcam"), horizontal=True)
+    st.markdown("### 📥 Phương thức nhập")
+    
+    # SỬ DỤNG ICON THAY CHO CHỮ
+    # 📁: Tải file | 📷: Chụp ảnh
+    choice = st.radio(
+        "Chọn cách thức:",
+        ["📁 Tải ảnh", "📷 Webcam"],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
     
     img_data = None
-    if source == "Tải ảnh từ máy":
-        img_data = st.file_uploader("Kéo thả ảnh vào đây...", type=["jpg", "png", "jpeg"])
+    if "📁" in choice:
+        img_data = st.file_uploader("Chọn file hình ảnh...", type=["jpg", "png", "jpeg"])
     else:
-        img_data = st.camera_input("Chụp ảnh")
+        img_data = st.camera_input("Chụp ảnh phân tích")
 
 with col2:
-    st.subheader("📊 Kết quả phân tích AI")
+    st.markdown("### 🔍 Phân tích AI")
     if img_data is not None:
-        # 1. Hiển thị ảnh ngay lập tức
         image = Image.open(img_data).convert('RGB')
-        st.image(image, caption='Ảnh đối tượng', use_container_width=True)
+        st.image(image, caption='Dữ liệu đầu vào', use_container_width=True)
         
-        # 2. Chạy dự đoán
         if model is not None:
-            with st.spinner('Đang tính toán xác suất...'):
-                # Tiền xử lý (Rescale 1./255)
+            with st.spinner('AI đang quét hình ảnh...'):
+                # Xử lý ảnh
                 img_resized = image.resize((224, 224))
                 img_array = np.array(img_resized).astype(np.float32) / 255.0
                 img_array = np.expand_dims(img_array, axis=0)
@@ -274,25 +276,33 @@ with col2:
                 # Dự đoán
                 prediction = model.predict(img_array)
                 prob = float(prediction[0][0])
-            
-            # 3. Hiển thị kết luận (Sửa dấu theo nhãn của bạn: < 0.5 là Người)
+                time.sleep(0.4)
+
             st.markdown("---")
+            # HIỂN THỊ KẾT QUẢ VỚI CHỈ SỐ ĐẸP
             if prob < 0.5:
                 confidence = (1 - prob) * 100
-                st.success(f"## ✅ KẾT QUẢ: ĐÂY LÀ NGƯỜI")
-                st.metric("Độ tin cậy", f"{confidence:.2f}%")
+                st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
+                st.metric("Mức độ tin cậy", f"{confidence:.2f}%", delta="Positive Match")
                 st.balloons()
             else:
                 confidence = prob * 100
-                st.error(f"## ❌ KẾT QUẢ: KHÔNG PHẢI NGƯỜI")
-                st.metric("Độ tin cậy", f"{confidence:.2f}%")
-        else:
-            st.error("Không thể kết nối với bộ não AI. Vui lòng kiểm tra file weights trên GitHub.")
+                st.error(f"## ❌ KẾT LUẬN: KHÔNG PHẢI NGƯỜI")
+                st.metric("Mức độ tin cậy", f"{confidence:.2f}%", delta="- Negative", delta_color="inverse")
     else:
-        st.info("Hệ thống đang chờ dữ liệu ảnh từ cột bên trái...")
+        st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
 
-# --- THÔNG TIN BỔ SUNG ---
-st.sidebar.markdown("### 🛠 Công nghệ sử dụng")
-st.sidebar.write("- MobileNetV2 (Transfer Learning)")
-st.sidebar.write("- TensorFlow & Streamlit Cloud")
-st.sidebar.write("- Image Preprocessing (224x224)")
+# --- SIDEBAR ---
+with st.sidebar:
+    st.title("👨‍🎓 Tác giả")
+    st.markdown(f"""
+    **Họ tên:** Lê Đặng Tuấn Bảo  
+    **MSV:** 223332815  
+    **Lớp:** RB&AI-K63  
+    ---
+    **Công nghệ:**
+    - CNN MobileNetV2
+    - Streamlit Cloud
+    """)
+    st.divider()
+    st.caption("© 2026 AI Project Solution")
