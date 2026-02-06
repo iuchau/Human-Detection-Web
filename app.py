@@ -209,22 +209,23 @@ import time
 st.set_page_config(page_title="Human Detection ", page_icon="👤", layout="wide")
 
 # CSS để làm đẹp các nút và bo góc
-st.st.markdown("""
+st.markdown("""
     <style>
-    /* Lật ngược camera */
+    .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
+    div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .main { background-color: #f0f2f6; }
+    </style>
+    """, unsafe_allow_html=True)
+# Thêm đoạn này vào phần CSS của bạn
+st.markdown("""
+    <style>
+    /* Lật ngược camera (Mirror effect) */
+    /* Nếu muốn lật từ trái sang phải, dùng scaleX(-1) */
+    /* Nếu muốn quay về mặc định, dùng scaleX(1) */
     video {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
-    
-    .stTabs [data-baseweb="tab-list"] { gap: 24px; }
-    .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        background-color: #f0f2f6;
-        border-radius: 10px 10px 0px 0px;
-        padding: 10px;
-    }
-    .stTabs [aria-selected="true"] { background-color: #1E3A8A !important; color: white !important; }
     </style>
     """, unsafe_allow_html=True)
 # 2. HÀM NẠP MÔ HÌNH (Cache để chạy nhanh hơn)
@@ -329,6 +330,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
