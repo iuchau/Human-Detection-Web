@@ -199,173 +199,36 @@
 
 # st.sidebar.divider()
 
-# import streamlit as st
-# import tensorflow as tf
-# from PIL import Image
-# import numpy as np
-# import time
-
-# # 1. CẤU HÌNH TRANG
-# st.set_page_config(page_title="Human Detection ", page_icon="👤", layout="wide")
-
-# # CSS để làm đẹp các nút và bo góc
-# st.markdown("""
-#     <style>
-#     .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
-#     div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-#     .main { background-color: #f0f2f6; }
-#     </style>
-#     """, unsafe_allow_html=True)
-# # Thêm đoạn này vào phần CSS của bạn
-# st.markdown("""
-#     <style>
-#     /* Lật ngược camera (Mirror effect) */
-#     /* Nếu muốn lật từ trái sang phải, dùng scaleX(-1) */
-#     /* Nếu muốn quay về mặc định, dùng scaleX(1) */
-#     video {
-#         transform: scaleX(-1);
-#         -webkit-transform: scaleX(-1);
-#     }
-#     </style>
-#     """, unsafe_allow_html=True)
-# # 2. HÀM NẠP MÔ HÌNH (Cache để chạy nhanh hơn)
-# @st.cache_resource
-# def load_my_model():
-#     try:
-#         base_model = tf.keras.applications.MobileNetV2(input_shape=(224, 224, 3), include_top=False, weights=None)
-#         model = tf.keras.Sequential([
-#             base_model,
-#             tf.keras.layers.GlobalAveragePooling2D(),
-#             tf.keras.layers.Dense(1, activation='sigmoid')
-#         ])
-#         model.load_weights('model_weights.weights.h5')
-#         return model
-#     except Exception as e:
-#         st.error(f"Lỗi hệ thống: {e}")
-#         return None
-
-# model = load_my_model()
-
-# # --- HEADER ---
-# st.write("<h1 style='text-align: center; color: #1E3A8A;'>🎯 HỆ THỐNG NHẬN DIỆN NGƯỜI</h1>", unsafe_allow_html=True)
-# st.divider()
-
-# # --- CHIA CỘT ---
-# col1, col2 = st.columns([1, 1.2], gap="large")
-
-# with col1:
-#     st.markdown("### 📥 Phương thức nhập dữ liệu")
-    
-#     # CHUYỂN SANG DẠNG TABS THAY CHO RADIO
-#     tab_upload, tab_camera = st.tabs(["📁 Tải ảnh lên", "📷 Sử dụng Webcam"])
-    
-#     img_data = None
-#     with tab_upload:
-#         img_data = st.file_uploader("Kéo thả file hình ảnh tại đây...", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
-        
-#     with tab_camera:
-#         img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
-#         # Ưu tiên lấy ảnh từ camera nếu cả hai đều có dữ liệu
-#         if img_data_cam:
-#             img_data = img_data_cam
-
-# # with col1:
-# #     st.markdown("### 📥 Phương thức nhập")
-    
-# #     # SỬ DỤNG ICON THAY CHO CHỮ
-# #     # 📁: Tải file | 📷: Chụp ảnh
-# #     choice = st.radio(
-# #         "Chọn cách thức:",
-# #         ["📁 Tải ảnh", "📷 Webcam"],
-# #         horizontal=True,
-# #         label_visibility="collapsed"
-# #     )
-    
-# #     img_data = None
-# #     if "📁" in choice:
-# #         img_data = st.file_uploader("Chọn file hình ảnh...", type=["jpg", "png", "jpeg"])
-# #     else:
-# #         img_data = st.camera_input("Chụp ảnh phân tích")
-
-# with col2:
-#     st.markdown("### 🔍 Phân tích ")
-#     if img_data is not None:
-#         image = Image.open(img_data).convert('RGB')
-#         st.image(image, caption='Dữ liệu đầu vào', use_container_width=True)
-        
-#         if model is not None:
-#             with st.spinner('Đang quét hình ảnh...'):
-#                 # Xử lý ảnh
-#                 img_resized = image.resize((224, 224))
-#                 img_array = np.array(img_resized).astype(np.float32) / 255.0
-#                 img_array = np.expand_dims(img_array, axis=0)
-                
-#                 # Dự đoán
-#                 prediction = model.predict(img_array)
-#                 prob = float(prediction[0][0])
-#                 time.sleep(0.4)
-
-#             st.markdown("---")
-#             # HIỂN THỊ KẾT QUẢ VỚI CHỈ SỐ ĐẸP
-#             if prob < 0.5:
-#                 confidence = (1 - prob) * 100
-#                 st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
-#                 st.balloons()
-#             else:
-#                 confidence = prob * 100
-#                 st.error(f"## ❌ KẾT LUẬN: KHÔNG PHẢI NGƯỜI")
-#     else:
-#         st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
-
-# # --- SIDEBAR ---
-# with st.sidebar:
-#     st.markdown(f"""
-#     **Họ tên:** Lê Đặng Tuấn Bảo  
-#     **MSV:** 223332815  
-#     **Lớp:** RB&AI-K63  
-#     ---
-#     **Công nghệ:**
-#     - CNN MobileNetV2
-#     - Streamlit Cloud
-#     """)
-#     st.divider()
-#     st.caption("© 2026 AI Project Solution")
-
-
 import streamlit as st
 import tensorflow as tf
-from PIL import Image, ImageOps # Thêm ImageOps để lật ảnh
+from PIL import Image
 import numpy as np
 import time
 
 # 1. CẤU HÌNH TRANG
-st.set_page_config(page_title="Human Detection AI", page_icon="👤", layout="wide")
+st.set_page_config(page_title="Human Detection ", page_icon="👤", layout="wide")
 
-# CSS: Làm đẹp giao diện và LẬT NGƯỢC khung nhìn Camera (Soi gương)
+# CSS để làm đẹp các nút và bo góc
 st.markdown("""
     <style>
-    /* Lật ngược camera khi đang soi */
+    .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
+    div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .main { background-color: #f0f2f6; }
+    </style>
+    """, unsafe_allow_html=True)
+# Thêm đoạn này vào phần CSS của bạn
+st.markdown("""
+    <style>
+    /* Lật ngược camera (Mirror effect) */
+    /* Nếu muốn lật từ trái sang phải, dùng scaleX(-1) */
+    /* Nếu muốn quay về mặc định, dùng scaleX(1) */
     video {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
-    .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
-    div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .main { background-color: #f0f2f6; }
-    
-    /* Làm đẹp Tabs */
-    .stTabs [data-baseweb="tab-list"] { gap: 24px; }
-    .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        background-color: #f0f2f6;
-        border-radius: 10px 10px 0px 0px;
-        padding: 10px;
-    }
-    .stTabs [aria-selected="true"] { background-color: #1E3A8A !important; color: white !important; }
     </style>
     """, unsafe_allow_html=True)
-
-# 2. HÀM NẠP MÔ HÌNH
+# 2. HÀM NẠP MÔ HÌNH (Cache để chạy nhanh hơn)
 @st.cache_resource
 def load_my_model():
     try:
@@ -392,46 +255,64 @@ col1, col2 = st.columns([1, 1.2], gap="large")
 
 with col1:
     st.markdown("### 📥 Phương thức nhập dữ liệu")
+    
+    # CHUYỂN SANG DẠNG TABS THAY CHO RADIO
     tab_upload, tab_camera = st.tabs(["📁 Tải ảnh lên", "📷 Sử dụng Webcam"])
     
     img_data = None
-    is_from_camera = False # Biến kiểm tra nguồn ảnh
-    
     with tab_upload:
         img_data = st.file_uploader("Kéo thả file hình ảnh tại đây...", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
         
     with tab_camera:
         img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
+        # Ưu tiên lấy ảnh từ camera nếu cả hai đều có dữ liệu
         if img_data_cam:
             img_data = img_data_cam
-            is_from_camera = True # Đánh dấu là ảnh từ camera
+
+# with col1:
+#     st.markdown("### 📥 Phương thức nhập")
+    
+#     # SỬ DỤNG ICON THAY CHO CHỮ
+#     # 📁: Tải file | 📷: Chụp ảnh
+#     choice = st.radio(
+#         "Chọn cách thức:",
+#         ["📁 Tải ảnh", "📷 Webcam"],
+#         horizontal=True,
+#         label_visibility="collapsed"
+#     )
+    
+#     img_data = None
+#     if "📁" in choice:
+#         img_data = st.file_uploader("Chọn file hình ảnh...", type=["jpg", "png", "jpeg"])
+#     else:
+#         img_data = st.camera_input("Chụp ảnh phân tích")
 
 with col2:
     st.markdown("### 🔍 Phân tích ")
     if img_data is not None:
         image = Image.open(img_data).convert('RGB')
-        
-        # NẾU LÀ ẢNH TỪ CAMERA THÌ LẬT NGƯỢC LẠI CHO ĐÚNG CHIỀU SOI GƯƠNG
-        if is_from_camera:
-            image = ImageOps.mirror(image)
-        
-        st.image(image, caption='Dữ liệu đầu vào (Đã lật theo chiều gương)', use_container_width=True)
+        st.image(image, caption='Dữ liệu đầu vào', use_container_width=True)
         
         if model is not None:
             with st.spinner('Đang quét hình ảnh...'):
+                # Xử lý ảnh
                 img_resized = image.resize((224, 224))
                 img_array = np.array(img_resized).astype(np.float32) / 255.0
                 img_array = np.expand_dims(img_array, axis=0)
                 
+                # Dự đoán
                 prediction = model.predict(img_array)
                 prob = float(prediction[0][0])
                 time.sleep(0.4)
 
             st.markdown("---")
+            # HIỂN THỊ KẾT QUẢ VỚI CHỈ SỐ ĐẸP
             if prob < 0.5:
+                confidence = (1 - prob) * 100
                 st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
                 st.balloons()
             else:
+                confidence = prob * 100
                 st.error(f"## ❌ KẾT LUẬN: KHÔNG PHẢI NGƯỜI")
     else:
         st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
@@ -449,6 +330,9 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
+
+
 
 
 
