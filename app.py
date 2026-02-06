@@ -137,29 +137,55 @@ from PIL import Image
 import numpy as np
 import time
 
-# --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Human Detection", page_icon="👤", layout="wide")
 
-# --- CSS TÙY CHỈNH ---
 st.markdown("""
     <style>
     .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
     div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .main { background-color: #f0f2f6; }
 
-    /* 1. Lật ngược luồng video trực tiếp từ camera */
+    /* 1. Lật ngược camera khi đang soi */
     video {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
 
-    /* 2. Class riêng để lật ảnh kết quả - CHỈ dùng khi chụp từ webcam */
-    .mirrored-result img {
+    /* 2. Lật ngược cái ảnh KẾT QUẢ sau khi chụp từ camera */
+    /* CSS này chỉ tác động vào ảnh được tạo ra từ st.camera_input */
+    [data-testid="stCameraInput"] img {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
     </style>
     """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    /* Lật ngược ảnh hiển thị trong phần kết quả dự đoán */
+    [data-testid="stImage"] img {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+
+
+
+    # /* 1. Lật ngược luồng video trực tiếp từ camera */
+    # video {
+    #     transform: scaleX(-1);
+    #     -webkit-transform: scaleX(-1);
+    # }
+
+    # /* 2. Class riêng để lật ảnh kết quả - CHỈ dùng khi chụp từ webcam */
+    # .mirrored-result img {
+    #     transform: scaleX(-1);
+    #     -webkit-transform: scaleX(-1);
+    # }
+    # </style>
+    # """, unsafe_allow_html=True)
 
 # --- LOAD MODEL ---
 @st.cache_resource
@@ -253,6 +279,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
