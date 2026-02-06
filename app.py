@@ -137,13 +137,15 @@ from PIL import Image
 import numpy as np
 import time
 
+# --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Human Detection", page_icon="👤", layout="wide")
 
+# --- CSS TÙY CHỈNH ---
 st.markdown("""
     <style>
     .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
     div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .main { background-color: #f0f2f6; 
+    .main { background-color: #f0f2f6; }
 
     /* 1. Lật ngược luồng video trực tiếp từ camera */
     video {
@@ -251,7 +253,6 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
-
 
 
 
