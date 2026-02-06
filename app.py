@@ -25,6 +25,59 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    /* Tổng thể giao diện */
+    .main { background-color: #f8f9fa; }
+    
+    /* Tùy chỉnh tiêu đề và text */
+    .stMarkdown h3 { color: #1E3A8A; margin-bottom: 20px; }
+
+    /* 1. Làm đẹp khung Camera Input */
+    [data-testid="stCameraInput"] {
+        border: 3px solid #1E3A8A;
+        border-radius: 20px;
+        padding: 10px;
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow: 0 10px 25px rgba(30, 58, 138, 0.2);
+        overflow: hidden;
+    }
+
+    /* 2. Hiệu ứng cho nút bấm trong Camera Input */
+    [data-testid="stCameraInput"] button {
+        background-color: #1E3A8A !important;
+        color: white !important;
+        border-radius: 10px !important;
+        transition: all 0.3s ease;
+    }
+
+    [data-testid="stCameraInput"] button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* 3. Lật ngược video webcam (Mirror) */
+    video {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        border-radius: 12px;
+    }
+
+    /* 4. Lật ngược ảnh kết quả hiển thị sau khi chụp */
+    [data-testid="stCameraInput"] img {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        border-radius: 12px;
+    }
+
+    /* Bo góc khung tải file */
+    [data-testid="stFileUploader"] {
+        border: 2px dashed #1E3A8A;
+        border-radius: 15px;
+        padding: 15px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 @st.cache_resource
 def load_my_model():
@@ -108,6 +161,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
