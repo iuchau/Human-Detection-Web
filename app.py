@@ -133,7 +133,7 @@
 
 import streamlit as st
 import tensorflow as tf
-from PIL import Image
+from PIL import Image, ImageOps
 import numpy as np
 import time
 
@@ -147,14 +147,8 @@ st.markdown("""
     div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .main { background-color: #f0f2f6; }
 
-    /* 1. Lật ngược luồng video trực tiếp từ camera */
+    /* Lật ngược luồng video soi gương cho Webcam */
     video {
-        transform: scaleX(-1);
-        -webkit-transform: scaleX(-1);
-    }
-
-    /* 2. Class riêng để lật ảnh kết quả - CHỈ dùng khi chụp từ webcam */
-    .mirrored-result img {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
@@ -206,21 +200,21 @@ with col1:
 with col2:
     st.markdown("### 🔍 Phân tích ")
     if img_data is not None:
+        # Mở ảnh gốc
         image = Image.open(img_data).convert('RGB')
         
-        # KIỂM TRA PHƯƠNG THỨC ĐỂ ÁP DỤNG CSS LẬT ẢNH
+        # --- LOGIC XỬ LÝ LẬT ẢNH QUAN TRỌNG ---
         if st.session_state.input_method == "camera":
-            # Nếu dùng camera, bọc trong div mirrored-result để lật ngược ảnh hiển thị
-            st.markdown('<div class="mirrored-result">', unsafe_allow_html=True)
-            st.image(image, caption='Dữ liệu từ Camera (Đã lật gương)', use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            # Nếu chụp từ camera, tiến hành lật ngược ảnh (Mirror)
+            image = ImageOps.mirror(image)
+            st.image(image, caption='Ảnh chụp từ Webcam (Chế độ gương)', use_container_width=True)
         else:
-            # Nếu tải ảnh lên, hiển thị bình thường không lật
-            st.image(image, caption='Dữ liệu tải lên (Giữ nguyên gốc)', use_container_width=True)
+            # Nếu tải lên, giữ nguyên không lật
+            st.image(image, caption='Ảnh tải lên gốc', use_container_width=True)
         
+        # --- DỰ ĐOÁN ---
         if model is not None:
             with st.spinner('Đang quét hình ảnh...'):
-                # Tiền xử lý
                 img_resized = image.resize((224, 224))
                 img_array = np.array(img_resized).astype(np.float32) / 255.0
                 img_array = np.expand_dims(img_array, axis=0)
@@ -231,7 +225,7 @@ with col2:
 
             st.markdown("---")
             
-            # Kết luận dựa trên ngưỡng 0.5 (Giả định: < 0.5 là người theo logic cũ của bạn)
+            # Hiển thị kết quả (Dựa trên ngưỡng 0.5)
             if prob < 0.5:
                 st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
                 st.balloons()
@@ -253,6 +247,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
