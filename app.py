@@ -228,15 +228,7 @@ st.markdown("""
 #     }
 #     </style>
 #     """, unsafe_allow_html=True)
-# st.markdown("""
-#     <style>
-#     /* Lật ngược ảnh hiển thị trong phần kết quả dự đoán */
-#     [data-testid="stImage"] img {
-#         transform: scaleX(-1);
-#         -webkit-transform: scaleX(-1);
-#     }
-#     </style>
-#     """, unsafe_allow_html=True)
+
 st.markdown("""
     <style>
     .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
@@ -252,6 +244,15 @@ st.markdown("""
     /* 2. Lật ngược cái ảnh KẾT QUẢ sau khi chụp từ camera */
     /* CSS này chỉ tác động vào ảnh được tạo ra từ st.camera_input */
     [data-testid="stCameraInput"] img {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    /* Lật ngược ảnh hiển thị trong phần kết quả dự đoán */
+    [data-testid="stImage"] img {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
@@ -358,6 +359,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
