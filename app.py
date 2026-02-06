@@ -201,7 +201,7 @@
 
 import streamlit as st
 import tensorflow as tf
-from PIL import Image, ImageOps
+from PIL import Image
 import numpy as np
 import time
 
@@ -262,18 +262,12 @@ with col1:
     img_data = None
     with tab_upload:
         img_data = st.file_uploader("Kéo thả file hình ảnh tại đây...", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
-        
+    
     with tab_camera:
         img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
+        # Ưu tiên lấy ảnh từ camera nếu cả hai đều có dữ liệu
         if img_data_cam:
-            # Mở ảnh và thực hiện lật ngang (Mirror) để giống với giao diện camera
-            img_raw = Image.open(img_data_cam)
-            img_data = ImageOps.mirror(img_raw)
-    # with tab_camera:
-    #     img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
-    #     # Ưu tiên lấy ảnh từ camera nếu cả hai đều có dữ liệu
-    #     if img_data_cam:
-    #         img_data = img_data_cam   
+            img_data = img_data_cam   
 # with col1:
 #     st.markdown("### 📥 Phương thức nhập")
     
@@ -335,6 +329,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
