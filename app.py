@@ -217,21 +217,41 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 # Thêm đoạn này vào phần CSS của bạn
+# st.markdown("""
+#     <style>
+#     /* Lật ngược camera (Mirror effect) */
+#     /* Nếu muốn lật từ trái sang phải, dùng scaleX(-1) */
+#     /* Nếu muốn quay về mặc định, dùng scaleX(1) */
+#     video {
+#         transform: scaleX(-1);
+#         -webkit-transform: scaleX(-1);
+#     }
+#     </style>
+#     """, unsafe_allow_html=True)
+# st.markdown("""
+#     <style>
+#     /* Lật ngược ảnh hiển thị trong phần kết quả dự đoán */
+#     [data-testid="stImage"] img {
+#         transform: scaleX(-1);
+#         -webkit-transform: scaleX(-1);
+#     }
+#     </style>
+#     """, unsafe_allow_html=True)
 st.markdown("""
     <style>
-    /* Lật ngược camera (Mirror effect) */
-    /* Nếu muốn lật từ trái sang phải, dùng scaleX(-1) */
-    /* Nếu muốn quay về mặc định, dùng scaleX(1) */
+    .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
+    div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .main { background-color: #f0f2f6; }
+
+    /* 1. Lật ngược camera khi đang soi */
     video {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
-    </style>
-    """, unsafe_allow_html=True)
-st.markdown("""
-    <style>
-    /* Lật ngược ảnh hiển thị trong phần kết quả dự đoán */
-    [data-testid="stImage"] img {
+
+    /* 2. Lật ngược cái ảnh KẾT QUẢ sau khi chụp từ camera */
+    /* CSS này chỉ tác động vào ảnh được tạo ra từ st.camera_input */
+    [data-testid="stCameraInput"] img {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
@@ -338,6 +358,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
