@@ -64,22 +64,45 @@ model = load_my_model()
 st.write("<h1 style='text-align: center; color: #1E3A8A;'>🎯 HỆ THỐNG NHẬN DIỆN NGƯỜI</h1>", unsafe_allow_html=True)
 st.divider()
 
+# Khởi tạo trạng thái để lưu phương thức nhập liệu
+if 'input_method' not in st.session_state:
+    st.session_state.input_method = None
+
 col1, col2 = st.columns([1, 1.2], gap="large")
 
 with col1:
-    st.markdown("### 📥 Phương thức nhập dữ liệu")
+    st.markdown("### 📥 Chọn phương thức nhập")
     
-    tab_upload, tab_camera = st.tabs(["📁 Tải ảnh lên", "📷 Sử dụng Webcam"])
-    
-    img_data = None
-    with tab_upload:
-        img_data = st.file_uploader("Kéo thả file hình ảnh tại đây...", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
-    
-    with tab_camera:
-        img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
+    # Tạo 2 nút bấm nằm ngang
+    c1, c2 = st.columns(2)
+    if c1.button("📁 Tải ảnh lên", use_container_width=True):
+        st.session_state.input_method = "upload"
+    if c2.button("📷 Dùng Webcam", use_container_width=True):
+        st.session_state.input_method = "camera"
 
-        if img_data_cam:
-            img_data = img_data_cam   
+    img_data = None
+
+    # Hiển thị trình tải file hoặc camera dựa trên nút đã bấm
+    if st.session_state.input_method == "upload":
+        img_data = st.file_uploader("Kéo thả file hình ảnh...", type=["jpg", "png", "jpeg"])
+    
+    elif st.session_state.input_method == "camera":
+        img_data = st.camera_input("Chụp ảnh để phân tích")
+
+# with col1:
+#     st.markdown("### 📥 Phương thức nhập dữ liệu")
+    
+#     tab_upload, tab_camera = st.tabs(["📁 Tải ảnh lên", "📷 Sử dụng Webcam"])
+    
+#     img_data = None
+#     with tab_upload:
+#         img_data = st.file_uploader("Kéo thả file hình ảnh tại đây...", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
+    
+#     with tab_camera:
+#         img_data_cam = st.camera_input("Chụp ảnh phân tích", label_visibility="collapsed")
+
+#         if img_data_cam:
+#             img_data = img_data_cam   
 
 with col2:
     st.markdown("### 🔍 Phân tích ")
@@ -122,6 +145,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
