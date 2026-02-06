@@ -228,6 +228,15 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    /* Lật ngược ảnh hiển thị trong phần kết quả dự đoán */
+    [data-testid="stImage"] img {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+    }
+    </style>
+    """, unsafe_allow_html=True)
 # 2. HÀM NẠP MÔ HÌNH (Cache để chạy nhanh hơn)
 @st.cache_resource
 def load_my_model():
@@ -329,6 +338,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
