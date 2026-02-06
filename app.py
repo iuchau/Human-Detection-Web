@@ -216,6 +216,18 @@ st.markdown("""
     .main { background-color: #f0f2f6; }
     </style>
     """, unsafe_allow_html=True)
+# Thêm đoạn này vào phần CSS của bạn
+st.markdown("""
+    <style>
+    /* Lật ngược camera (Mirror effect) */
+    /* Nếu muốn lật từ trái sang phải, dùng scaleX(-1) */
+    /* Nếu muốn quay về mặc định, dùng scaleX(1) */
+    video {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # 2. HÀM NẠP MÔ HÌNH (Cache để chạy nhanh hơn)
 @st.cache_resource
@@ -319,6 +331,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
