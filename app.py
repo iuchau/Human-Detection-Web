@@ -133,7 +133,7 @@
 
 import streamlit as st
 import tensorflow as tf
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps # Thêm ImageOps để lật ảnh
 import numpy as np
 import time
 
@@ -147,7 +147,7 @@ st.markdown("""
     div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .main { background-color: #f0f2f6; }
 
-    /* Lật ngược luồng video soi gương cho Webcam */
+    /* Lật ngược luồng video soi gương cho Webcam lúc đang soi */
     video {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
@@ -200,19 +200,19 @@ with col1:
 with col2:
     st.markdown("### 🔍 Phân tích ")
     if img_data is not None:
-        # Mở ảnh gốc
+        # 1. Mở ảnh từ dữ liệu đầu vào
         image = Image.open(img_data).convert('RGB')
         
-        # --- LOGIC XỬ LÝ LẬT ẢNH QUAN TRỌNG ---
+        # 2. XỬ LÝ LẬT ẢNH NẾU DÙNG CAMERA
         if st.session_state.input_method == "camera":
-            # Nếu chụp từ camera, tiến hành lật ngược ảnh (Mirror)
+            # Lật ngược ảnh vật lý để hiển thị và đưa vào AI đồng nhất với lúc soi gương
             image = ImageOps.mirror(image)
-            st.image(image, caption='Ảnh chụp từ Webcam (Chế độ gương)', use_container_width=True)
+            st.image(image, caption='Kết quả chụp (Đã lật gương)', use_container_width=True)
         else:
-            # Nếu tải lên, giữ nguyên không lật
-            st.image(image, caption='Ảnh tải lên gốc', use_container_width=True)
+            # Nếu tải lên từ máy tính, giữ nguyên không lật
+            st.image(image, caption='Ảnh gốc tải lên', use_container_width=True)
         
-        # --- DỰ ĐOÁN ---
+        # 3. DỰ ĐOÁN
         if model is not None:
             with st.spinner('Đang quét hình ảnh...'):
                 img_resized = image.resize((224, 224))
@@ -225,7 +225,7 @@ with col2:
 
             st.markdown("---")
             
-            # Hiển thị kết quả (Dựa trên ngưỡng 0.5)
+            # Kết luận (Dựa trên logic của bạn: < 0.5 là Người)
             if prob < 0.5:
                 st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
                 st.balloons()
