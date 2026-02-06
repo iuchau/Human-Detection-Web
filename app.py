@@ -133,22 +133,28 @@
 
 import streamlit as st
 import tensorflow as tf
-from PIL import Image, ImageOps # Thêm ImageOps để lật ảnh
+from PIL import Image, ImageOps
 import numpy as np
 import time
 
 # --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Human Detection", page_icon="👤", layout="wide")
 
-# --- CSS TÙY CHỈNH ---
+# --- CSS TÙY CHỈNH (PHẦN QUAN TRỌNG NHẤT) ---
 st.markdown("""
     <style>
     .stRadio [data-testid="stMarkdownContainer"] p { font-size: 18px; font-weight: bold; }
     div[data-testid="stMetric"] { background-color: #ffffff; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .main { background-color: #f0f2f6; }
 
-    /* Lật ngược luồng video soi gương cho Webcam lúc đang soi */
+    /* 1. Lật ngược luồng video lúc đang soi webcam */
     video {
+        transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+    }
+
+    /* 2. Lật ngược ảnh kết quả hiển thị NGAY TRONG widget camera_input sau khi chụp */
+    [data-testid="stCameraInput"] img {
         transform: scaleX(-1);
         -webkit-transform: scaleX(-1);
     }
@@ -184,7 +190,6 @@ col1, col2 = st.columns([1, 1.2], gap="large")
 
 with col1:
     st.markdown("### 📥 Chọn phương thức nhập")
-    
     c1, c2 = st.columns(2)
     if c1.button("📁 Tải ảnh lên", use_container_width=True):
         st.session_state.input_method = "upload"
@@ -195,37 +200,32 @@ with col1:
     if st.session_state.input_method == "upload":
         img_data = st.file_uploader("Kéo thả file hình ảnh...", type=["jpg", "png", "jpeg"])
     elif st.session_state.input_method == "camera":
+        # Khi chụp xong, CSS ở mục 2 bên trên sẽ lật cái ảnh hiển thị tại đây
         img_data = st.camera_input("Chụp ảnh để phân tích")
 
 with col2:
     st.markdown("### 🔍 Phân tích ")
     if img_data is not None:
-        # 1. Mở ảnh từ dữ liệu đầu vào
         image = Image.open(img_data).convert('RGB')
         
-        # 2. XỬ LÝ LẬT ẢNH NẾU DÙNG CAMERA
+        # Xử lý dữ liệu ảnh cho AI
         if st.session_state.input_method == "camera":
-            # Lật ngược ảnh vật lý để hiển thị và đưa vào AI đồng nhất với lúc soi gương
+            # Lật vật lý để ảnh hiển thị ở col2 cũng đồng bộ
             image = ImageOps.mirror(image)
             st.image(image, caption='Kết quả chụp (Đã lật gương)', use_container_width=True)
         else:
-            # Nếu tải lên từ máy tính, giữ nguyên không lật
-            st.image(image, caption='Ảnh gốc tải lên', use_container_width=True)
+            st.image(image, caption='Dữ liệu tải lên (Giữ nguyên)', use_container_width=True)
         
-        # 3. DỰ ĐOÁN
         if model is not None:
-            with st.spinner('Đang quét hình ảnh...'):
+            with st.spinner('Đang phân tích...'):
                 img_resized = image.resize((224, 224))
                 img_array = np.array(img_resized).astype(np.float32) / 255.0
                 img_array = np.expand_dims(img_array, axis=0)
-            
                 prediction = model.predict(img_array)
                 prob = float(prediction[0][0])
                 time.sleep(0.4)
 
             st.markdown("---")
-            
-            # Kết luận (Dựa trên logic của bạn: < 0.5 là Người)
             if prob < 0.5:
                 st.success(f"## ✅ KẾT LUẬN: ĐÂY LÀ NGƯỜI")
                 st.balloons()
@@ -234,20 +234,11 @@ with col2:
     else:
         st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
 
-# --- SIDEBAR ---
+# Sidebar (Giữ nguyên thông tin của bạn)
 with st.sidebar:
-    st.markdown(f"""
-    **Họ tên:** Lê Đặng Tuấn Bảo  
-    **MSV:** 223332815  
-    **Lớp:** RB&AI-K63  
-    ---
-    **Công nghệ:**
-    - CNN MobileNetV2
-    - Streamlit Cloud
-    """)
+    st.markdown(f"**Họ tên:** Lê Đặng Tuấn Bảo\n**MSV:** 223332815\n**Lớp:** RB&AI-K63")
     st.divider()
     st.caption("© 2026 AI Project Solution")
-
 
 
 
