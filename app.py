@@ -234,9 +234,16 @@ with col2:
     else:
         st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
 
-# Sidebar (Giữ nguyên thông tin của bạn)
 with st.sidebar:
-    st.markdown(f"**Họ tên:** Lê Đặng Tuấn Bảo\n**MSV:** 223332815\n**Lớp:** RB&AI-K63")
+    st.markdown(f"""
+    **Họ tên:** Lê Đặng Tuấn Bảo  
+    **MSV:** 223332815  
+    **Lớp:** RB&AI-K63  
+    ---
+    **Công nghệ:**
+    - CNN MobileNetV2
+    - Streamlit Cloud
+    """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
 
