@@ -130,22 +130,51 @@ with col2:
             st.image(image, caption='Kết quả chụp', use_container_width=True)
         else:
             st.image(image, caption='Dữ liệu tải lên', use_container_width=True)
-        
+        # Tìm đoạn này trong code của bạn:
         if model is not None:
             with st.spinner('Đang phân tích...'):
-                img_resized = image.resize((224, 224))
-                img_array = np.array(img_resized).astype(np.float32) / 255.0
-                img_array = np.expand_dims(img_array, axis=0)
+                # ... các dòng xử lý ảnh ...
                 prediction = model.predict(img_array)
                 prob = float(prediction[0][0])
                 time.sleep(0.4)
 
             st.markdown("---")
+            
+            # --- BẮT ĐẦU THAY THẾ TỪ ĐÂY ---
             if prob < 0.5:
-                st.success(f"## ✅ ĐÂY LÀ NGƯỜI")
+                confidence = (1 - prob) * 100
+                label = "NGƯỜI"
+                st.success(f"## ✅ ĐÂY LÀ: {label}")
                 st.balloons()
             else:
-                st.error(f"## ❌ KHÔNG PHẢI NGƯỜI")
+                confidence = prob * 100
+                label = "KHÔNG PHẢI NGƯỜI"
+                st.error(f"## ❌ {label}")
+
+            # Hiển thị thanh phần trăm trực quan
+            st.write(f"**Độ tin cậy:** {confidence:.2f}%")
+            st.progress(confidence / 100)
+            
+            # Hiển thị chỉ số dạng thẻ (Metric) cho đẹp
+            m1, m2 = st.columns(2)
+            m1.metric("Kết quả", label)
+            m2.metric("Độ chính xác", f"{confidence:.1f}%")
+            # --- KẾT THÚC THAY THẾ ---
+        # if model is not None:
+        #     with st.spinner('Đang phân tích...'):
+        #         img_resized = image.resize((224, 224))
+        #         img_array = np.array(img_resized).astype(np.float32) / 255.0
+        #         img_array = np.expand_dims(img_array, axis=0)
+        #         prediction = model.predict(img_array)
+        #         prob = float(prediction[0][0])
+        #         time.sleep(0.4)
+
+        #     st.markdown("---")
+        #     if prob < 0.5:
+        #         st.success(f"## ✅ ĐÂY LÀ NGƯỜI")
+        #         st.balloons()
+        #     else:
+        #         st.error(f"## ❌ KHÔNG PHẢI NGƯỜI")
     else:
         st.info("Hệ thống đang sẵn sàng. Hãy cung cấp hình ảnh để bắt đầu.")
 
@@ -161,6 +190,7 @@ with st.sidebar:
     """)
     st.divider()
     st.caption("© 2026 AI Project Solution")
+
 
 
 
